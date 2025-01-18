@@ -1,0 +1,356 @@
+{% extends 'layout.html' %}
+{% block content %}
+<style>
+.main-content {
+  width: 100%;
+}
+.main-container {
+  width: 100%;
+}
+#searchText {
+  font-size: 15px;
+  padding-left: 15px; 
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 8px;
+}
+#search-query{
+  background-color: #3157EF;
+  font-size: 15px;
+  color: #fff;
+  border: none;
+  border-bottom-right-radius: 8px;
+  border-top-right-radius: 8px;
+  margin-top: -1px;
+  height: 48px;
+  cursor: pointer;
+}
+table tr td{
+  text-align: left;
+  padding-left: 20px;
+}
+#FilterModal{
+  left: 70%;
+  right: 15%;
+  top:40%;
+  background-color: #fafafa;
+  padding: 0;
+  max-height: 100%;
+  width: 20%;
+  will-change: top, opacity;
+  border-radius: 5px;
+  margin-top: 0px;
+}
+#qrmodal{
+  background-color: #fafafa;
+  border-radius: 5px;
+
+} 
+#filter_modal{
+  background-color: white;
+  border: none;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+input[type=checkbox]:checked, [type=checkbox]:not(:checked){
+  opacity: 1;
+  pointer-events: all;
+}
+#content-card{
+    display: none;
+    padding-top: 10px;
+    padding-right: 20px;
+    text-align: right;
+    margin-top: -10px;
+}
+#content-card button{
+    margin: 5px;
+    background-color: #3157EF; 
+    font-size: 16px;
+    font-weight: 500;
+}
+#all_lead{
+    display: none;
+    text-align: center;
+    padding-left: 10px;
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 500;
+}
+  #all_selected{
+    cursor: pointer;
+    color: blue;
+    margin-left: 8px;
+    text-align: center;
+   
+  }
+  #clear_select{
+    cursor: pointer;
+    margin-left: 8px;
+    color: blue;
+    display: none;
+  }
+ </style>
+      <div class="card" style="border-radius: 10px; box-shadow:0 0 10px  #C3CFFF;">
+      <div class="card-content">
+        <div class="row">
+          <div class="col s12 m6">
+            <form method="GET">       
+              <div class="search-container" style="display: flex;">
+               <input class="search-bar" type="text" id="searchText" placeholder="search mobilenumber" name="mobilenumber">
+               <button type="submit" id="search-query"><i class="material-icons">pageview</i></button>
+               <a class="waves-effect" href="#" title="Clear Filter" style="padding: 8px; padding-top: 4px;"><i class="material-icons" style="font-size: 40px; color: #3157EF; vertical-align: middle;">cancel</i></a>
+              </div>
+            </form>
+
+          </div>
+          <div class="col s6 m3">
+            <div class="pagination" style="text-align:center;font-size:16px;font-weight: 550;margin-top: 8px;">
+        
+                   <li><a class="disabled" href="#"><i class="material-icons">chevron_left</i></a></li>
+                
+                   <li style="margin-top: 3px;">@</li>
+                
+                   <li>
+                    <a class="waves-effect" href="#"><i class="material-icons">chevron_right</i></a>
+                   </li>
+                  
+            </div>
+          </div> 
+          <div class="col s3 m2">
+            <button class='modal-trigger' type="button" id="filter_modal">Filter <i class="material-icons" style="font-size:25px;color: #3157EF;">chevron_right</i></button>
+            <div id="FilterModal" class="modal">
+              <div class="modal-content">
+                <h5 style="font-weight: 600;">Filter Leads</h5>
+              <form method="get">
+                <div class="row">
+                  <div class="input-field col s12 filter-col">
+                    <input type="text" name="name" placeholder="Name">
+                    </div>
+                  </div>
+                  <div class="row">
+                  <div class="input-field col s12 filter-col">
+                    <input type="text" name="location" placeholder="Location">
+                    </div>
+                  </div>
+                  <div class="row">
+                  <div class="input-field col s12 filter-col">
+                    <input type="text" name="email" placeholder="Email">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col s12 filter-col source_filter">
+                    <label>Source</label>
+                    <dmc-select>
+                    <select name="external_lead" id="id_external_lead">
+                      <option value="" selected>--------------</option>
+                      <option value="true">External</option>
+                      <option value="false">Campaign</option>
+                    </select>
+                    </dmc-select>
+                    </div> 
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12 filter-col">
+            
+                      <label>Added On</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                  <div class="input-field col s12 filter-col">
+                
+                    <label>From Date</label>
+                  </div>
+                  </div>
+                  <div class="row">
+                  <div class="input-field col s12 filter-col">
+            
+                    <label>To Date</label>
+                  </div>
+                  </div>
+                  <div class="row">
+                    <div class="col s6 m6">
+                      <button style="background-color:white; color: #000; border: 1px solid black;" type="button" class=" modal-close btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                    <div class="col s6 m6" style="text-align: right;">
+                      <button class="btn btn-default filter_btn" type="submit" style="background-color: #3157EF;">Apply</button>
+                    </div>
+                 </div>
+              </form>
+            </div>     
+          </div>
+          </div>
+          <div class="col s3 m1">
+            <div class='modal-trigger' id="leadadd_modal" title="Add New Lead"><i class="material-icons" style="font-size:50px;color:#3157EF; cursor: pointer;">add_circle</i></div>
+          </div> 
+        </div><hr>
+          <div class="row">
+            <div class="col s12 m6">
+              <div id ="all_lead">
+                <p>Total <span id="lead_selected"></span> Leads on this page are selected.</p> 
+              </div>
+            </div>
+            <div class="col s12 m6">
+              <div id="content-card">
+                <button class="waves-effect waves-light btn" id="demo_modal" style="margin-left: 30px">Add Tags</button>
+              </div>
+            </div>
+          </div>
+          <table class="table">
+            <thead>              
+              <tr style="background-color: #C3CFFF;">
+                <td style='font-weight: bold' width="5%"><input type="checkbox" id="check_all" name="check_all" onchange="checkAll(this)"></td>
+                <td>Email</td>
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>Company</td>
+                <td>Subscribed</td>
+              </tr>
+            </thead>
+            {% if contacts %}  
+            <tbody>
+                {% for contact in contacts %}
+              <tr>
+                <td><input type="checkbox" id="check" name="check" value="{{contact.id}}"></td>
+                <td><a href="{{ url_for('main.contact_details', contact_id=contact.slug) }}">{{ contact.email }}</a>
+                </td>
+                <td>{{ contact.first_name }}</td>
+                <td>{{ contact.last_name }}</td>
+                <td>{{ contact.company }}</td>
+                <td>{% if contact.subscribed %}
+                    <span class="badge bg-success">Subscribed</span>
+                    {% else %}
+                    <span class="badge bg-danger">Unsubscribed</span>
+                    {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            {% else %}
+            <tbody>
+                <tr>
+                 <td><h6 style="margin-left: 20px">Item Not Found</h6></td>
+                </tr>   
+            </tbody>
+            {% endif %}
+          </table>
+          {% for page_num in contacts.iter_pages() %}
+          {% if page_num %}
+          {% if contacts.page == page_num %}
+            <a class="btn btn-info mb-4" href="{{ url_for('contacts.contacts', page=page_num)}}">{{ page_num }}</a>
+          {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('contacts.contacts', page=page_num)}}">{{ page_num }}</a>
+          {% endif %}
+          {% else %}
+           ...
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+<!--Add lead under tags Modal-->
+<div class="modal" id="demoModal" tabindex="-1" role="dialog" style="border-radius: 8px;">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-body">
+            <div class="modal-title" style="font-weight: 500; font-size: 22px;">Add Leads under Tags</div><br>
+              <form action="#" method="POST">
+                
+                  <label style="font-weight: 500; font-size: 18px;"> Select Tags</label>
+                  <dmc-select>
+                    <div class="row">
+                    <div class="select-field col s12 required">  
+                  <select name="segment" id="segment">
+                    <option value="">----------</option>  
+                
+                  
+                  
+                  </select>
+                  </div>
+                  </div>
+                  </dmc-select>
+                  <input type="hidden" class="form-control was-validated" id="lead_data" name="lead_data">
+                  <br>
+                  <div style="text-align:center;">
+                    <button class="btn btn-primary btn-submit" style="background-color: #3157EF; font-weight: 500;">Submit</button>
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button style="background-color:#6c757d;" type="button" class=" modal-close btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+      </div>
+  </div>
+</div>
+<!--End Demo Modal-->
+<!--Modal code-->
+<div class="modal" id="qrmodal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p style="font-size: large; font-weight: 600;">Add New One Leads</p>
+        <a class="btn btn-secondary blue" href="#" style="padding-left: 8px; padding-right: 8px; font-size: 14px;">Single Add</a>
+        <p style="font-size: large; font-weight: 600;">Add New Multiple Leads</p>
+        <a class="btn btn-secondary blue" style="padding-left: 8px; padding-right: 8px; font-size: 14px;" href="#">Bulk Add</a>
+      </div><hr>
+      <div class="modal-footer">
+        <button style="background-color:#6c757d;" type="button" class=" modal-close btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--End Modal-->
+</div>
+</div>
+<script>
+$(document).ready(function () {    
+  $('#demo_modal').on('click', function(e) {
+        e.preventDefault();
+        $('.modal').modal({
+            dismissible: true
+          });
+        $('#demoModal').modal('open');
+        $('select').formSelect(); 
+        $('#segment').select2({placeholder:'--select an option--'});
+        $('#segment').attr("searchable", true); 
+    });
+  $('#filter_modal').on('click', function(e) {
+      e.preventDefault();
+      $('.modal').modal({ dismissible: true});
+      $('#FilterModal').modal('open');
+      $('select').formSelect(); 
+    });
+  $('#leadadd_modal').on('click', function(e) {
+      e.preventDefault();
+      $('.modal').modal({ dismissible: true});
+      $('#qrmodal').modal('open');
+    });
+  }); 
+  $(function(){ 
+     var myArray = new Array();    
+   $("table > tbody > tr").each(function () {
+     var $tr = $(this);  
+     var $td = $tr.find("#check") 
+     $($td).on("click", function() {
+         if ($td.is(":checked")) {
+             myArray.push($td.val());
+             show_cont()
+         }
+         else{
+             myArray.pop($td.val());
+         }
+         if (myArray.length == 0){
+             $('#content-card').hide()
+         }
+     $("#lead_data").val(myArray)
+     });
+   });
+  $('#searchText').change(function(){
+      var qr = $(this).val();
+  });
+ });
+</script>
+{% endblock %}

@@ -1,0 +1,227 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="white-container">
+    <form id="create-campaign-form" method="POST" action="">
+        {{ campaign_info_form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Campaign Info</legend>
+            <hr>
+            <div class="form-group">
+                {{ campaign_info_form.campaign_name.label(class="form-control-label") }}
+                {% if campaign_info_form.campaign_name.errors %}
+                {{ campaign_info_form.campaign_name(class="form-control form-control-md is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in campaign_info_form.campaign_name.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ campaign_info_form.campaign_name(class="form-control form-control-md") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ campaign_info_form.subject_line.label(class="form-control-label") }}
+                {% if campaign_info_form.subject_line.errors %}
+                {{ campaign_info_form.subject_line(class="form-control form-control-md is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in campaign_info_form.subject_line.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ campaign_info_form.subject_line(class="form-control form-control-md") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ campaign_info_form.sender.label(class="form-control-label")}}
+                {% if campaign_info_form.sender.errors %}
+                    {{ campaign_info_form.sender(class="form-control form-control-md is-invalid")}}
+                    <div class="invalid-feedback">
+                        {% for error in campaign_info_form.sender.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ campaign_info_form.sender(class="form-control form-control-md")}}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ campaign_info_form.pre_text_loader.label(class="form-control-label") }}
+                {% if campaign_info_form.pre_text_loader.errors %}
+                {{ campaign_info_form.pre_text_loader(class="form-control form-control-md is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in campaign_info_form.pre_text_loader.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ campaign_info_form.pre_text_loader(class="form-control form-control-md") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <button onclick="checkForm()" type="submit" class="btn btn-outline-info">Next</button>
+    </form>
+
+    <form method="POST" action="">
+        {{ message_form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Campaign Message</legend>
+            <hr>
+            <div class="form-group">
+                {{ message_form.message.label(class="form-control-label") }}
+                {% if message_form.message.errors %}
+                {{ message_form.message(class="form-control form-control-md is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in message_form.message.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ message_form.message(class="form-control form-control-md") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <button type="submit" class="btn btn-outline-info">Next</button>
+    </form>
+    <form method="post" action="{{ url_for('campaigns.create_campaign') }}">
+        <legend>List & Schedule </legend>
+        <strong>Choose a list</strong>
+        {% for list in lists %}
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="lists" value="{{list[0]}}">
+            <label class="form-check-label" for="check1">{{list[1]}}</label>
+        </div>
+        {% endfor %}
+        <br>
+        <strong>Select when to send campaign</strong>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="campaign-send-options" value="best-time" id="best-time" checked>
+            <label class="form-check-label" for="best-time">Send at best time in the next 24 hours
+                <small><strong>(Recommended)</strong></small></label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="campaign-send-options" value="now" id="send-now">
+            <label class="form-check-label" for="send-now">Send now</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="campaign-send-options" value="schedule" id="schedule-campaign">
+            <label class="form-check-label" for="schedule-campaign">Schedule for some other date</label>
+        </div>
+        <br>
+        <div id="campaign-schedule" style="display: none;">
+            <strong>Select Campaign Schedule Date Time</strong>
+            <br>
+            <input type="datetime-local" id="campaign-send-datetime" name="campaign-send-datetime"
+                pattern="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}"><br>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    </form>
+    <script>
+       document.addEventListener("DOMContentLoaded", function () {
+    let radioInputs = document.querySelectorAll('input[type="radio"]');
+
+    radioInputs.forEach(function (radioInput) {
+        radioInput.addEventListener("click", function () {
+            if (radioInput.getAttribute('id') === 'schedule-campaign') {
+                document.getElementById('campaign-schedule').style.display = 'block';
+            } else {
+                document.getElementById('campaign-schedule').style.display = 'none';
+            }
+            });
+        });
+    });
+    </script>
+    {#
+    <form method="POST" action="">
+        {{ recipient_schedule_form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Lists & Schedule</legend>
+            <hr>
+            <div class="form-group">
+                {{ recipient_schedule_form.to_lists.label(class="form-control-label") }}
+                <div class="checkbox-group">
+                    {% if recipient_schedule_form.to_lists.errors %}
+                    <div class="invalid-feedback">
+                        {{ recipient_schedule_form.to_lists(class="form-control form-control-md is-invalid") }}
+                        {% for error in recipient_schedule_form.to_lists.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ recipient_schedule_form.to_lists(class="form-control form-control-md") }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ recipient_schedule_form.send_datetime.label(class="form-control-label") }}
+                {% if recipient_schedule_form.send_datetime.errors %}
+                {{ recipient_schedule_form.send_datetime(class="form-control form-control-md is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in recipient_schedule_form.send_datetime.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ recipient_schedule_form.send_datetime(class="form-control form-control-md") }}
+                {% endif %}
+            </div>
+
+        </fieldset>
+        <button type="submit" class="btn btn-outline-info">Create Campaign</button>
+    </form>
+    #}
+</div>
+{#
+<form method="POST" action="">
+    {{ form.hidden_tag() }}
+    <fieldset class="form-group">
+        <legend class="border-bottom mb4">Create Campaign</legend>
+        <div class="form-group">
+            {{ form.subject_line.label(class="form-control-label")}}
+            {% if form.subject_line.errors %}
+            {{ form.subject_line(class="form-control form-control-md is-invalid")}}
+            <div class="invalid-feedback">
+                {% for error in form.subject_line.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.subject_line(class="form-control form-control-md")}}
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.message_content.label(class="form-control-label")}}
+            {% if form.message_content.errors %}
+            {{ form.message_content(class="form-control form-control-md is-invalid")}}
+            <div class="invalid-feedback">
+                {% for error in form.message_content.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.message_content(class="form-control form-control-md")}}
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.to_listss.label(class="form-control-label")}}
+            {% if form.to_listss.errors %}
+            {{ form.to_listss(class="form-control form-control-md is-invalid")}}
+            <div class="invalid-feedback">
+                {% for error in form.to_listss.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.to_listss(class="form-control form-control-md")}}
+            {% endif %}
+        </div>
+    </fieldset>
+    <div class="form-group">
+        {{ form.submit(class="btn btn-outline-info") }}
+    </div>
+</form>
+</div>
+#}
+{% endblock %}

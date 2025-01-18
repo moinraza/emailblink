@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  flask-app:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    environment:
+      - .env
+    depends_on:
+      - db
+      
+  db:
+    image: postgres:14.13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:

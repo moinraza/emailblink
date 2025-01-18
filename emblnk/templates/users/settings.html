@@ -1,0 +1,16 @@
+<!--==========================Sidebar Section===============-->
+<div class="row">
+<div class="col col-lg-3">
+    <div style="position: sticky; top: 1rem;">
+        <h4>Settings</h4>
+        <ul class="list-group settings-menu">
+            <li class="{{ 'active-settings-menu' if active_settings_page == 'account' else '' }} list-group-item list-group-item-light"><a href="{{ url_for('users.account') }}">Account</a>
+            </li>
+            <li class="{{ 'active-settings-menu' if active_settings_page == 'senders' else '' }} list-group-item list-group-item-light"><a href="{{ url_for('users.senders') }}">Senders</a>
+            </li>
+            <li class="{{ 'active-settings-menu' if active_settings_page == 'attributes' else '' }}list-group-item list-group-item-light"><a href="{{ url_for('users.attributes') }}">Contact Attributes</a>
+            </li>
+            <li class="list-group-item list-group-item-light"><a href="{{ url_for('users.logout') }}">Logout</a></li>
+        </ul>
+    </div>
+</div>

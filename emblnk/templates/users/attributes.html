@@ -1,0 +1,77 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% include '/users/settings.html' %}
+
+<div class="col">
+<div class="content-section">
+    <h6>Contact Attributes</h6>
+    <hr>
+    {#
+      <form method="POST" action="" enctype="multipart/form-data">
+          {{ form.hidden_tag() }} 
+          <fieldset class="form-group">
+              <legend class="border-bottom mb4">Update Profile</legend>
+              <div class="form-group">
+                  {{ form.username.label(class="form-control-label")}}
+                  {% if form.username.errors %}
+                      {{ form.username(class="form-control form-control-md is-invalid")}}
+                      <div class="invalid-feedback">
+                          {% for error in form.username.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.username(class="form-control form-control-md")}}
+                  {% endif %}
+              </div>
+              <div class="form-group">
+                  {{ form.email.label(class="form-control-label")}}
+                  {% if form.email.errors %}
+                      {{ form.email(class="form-control form-control-md is-invalid")}}
+                      <div class="invalid-feedback">
+                          {% for error in form.email.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.email(class="form-control form-control-md")}}
+                  {% endif %}
+              </div>
+              <div class="form-group">
+                {{ form.bio.label(class="form-control-label")}}
+                {% if form.bio.errors %}
+                    {{ form.bio(class="form-control form-control-md is-invalid")}}
+                    <div class="invalid-feedback">
+                        {% for error in form.bio.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.bio(class="form-control form-control-md")}}
+                {% endif %}
+            </div>
+              <div class="form-group">
+                {{ form.picture.label() }}
+                {{ form.picture(class="form-control-file") }}
+                {% if form.picture.errors %}
+                    {% for error in form.picture.errors %}
+                        <span class="text-danger">{{ error }}</span></br>
+                    {% endfor %}
+                {% endif %}
+              </div>
+              <div class="form-check">
+                {{ form.show_email(class="form-check-input")}}
+                {{ form.show_email.label(class="form-check-label")}}
+            </div>
+          </fieldset>
+          <div class="form-group">
+              {{ form.submit(class="btn btn-outline-info") }}
+          </div>
+      </form>
+      <a href="{{ url_for('users.logout') }}"><button class="btn btn-outline-danger">Logout</button></a>
+      #}
+  </div>
+</div>
+
+</div>
+{% endblock %}

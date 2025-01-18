@@ -1,0 +1,107 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<div class="header-container">
+    <div>
+        <h2>Campaigns</h2>
+        <span>Create, send or schedule a campaign from here</span>
+    </div>
+    <a href="{{ url_for('campaigns.new_campaign') }}"><button class="btn btn-secondary"><i class="fa-solid fa-plus"></i> Create Campaign</button></a>
+</div>
+<hr class="heading-line">
+
+{% macro status_color(status) %}
+{% if status == 'Sent' %}
+bg-success
+{% elif status == 'Draft' %}
+bg-secondary
+{% elif status == 'Scheduled' %}
+bg-warning
+{% endif %}
+{% endmacro %}
+
+
+{% if total_campaigns != 0 %}
+
+<div class="row">
+    <div class="col">
+        <ul class="nav nav-tabs campaigns-tab">
+            <li class="nav-item campaigns-active-tab">
+                <a class="nav-link active" aria-current="page" href="#">All</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Sent</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Draft</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Scheduled</a>
+            </li>
+            <li class="nav-item ms-auto">
+                <div class="input-group">
+                    <div id="search-autocomplete" class="form-outline" data-mdb-input-init>
+                        <input type="search" id="form1" class="form-control" />
+                    </div>
+                    <button type="button" class="btn btn-primary" data-mdb-ripple-init>
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+        {% for campaign in campaigns.items %}
+<div class="white-container">
+    <h5>
+        <a style="text-decoration: none;"
+            href="{{ url_for('campaigns.campaign_details', campaign_id=campaign.campaign_id)}}">
+            {{ campaign.campaign_name }}
+        </a>
+    </h5>
+
+    <span class="t12"><b>Sender:</b> {{campaign.sender.email}} | <b>Total contacts:</b> 717 | <b>Status:</b> 
+        <span class="badge {{ status_color(campaign.campaign_status) }} text-light">{{campaign.campaign_status}}</span>
+
+        <div class="action-links mt-2">
+            <a class="t12" href="{{ url_for('campaigns.campaign_details', campaign_id=campaign.campaign_id)}}">
+                <i class="fa-solid fa-eye"></i> View
+            </a>
+            <span class="link-separator"></span>
+            {% if campaign.campaign_status == 'Sent' %}
+            <a class="t12" href="{{ url_for('campaigns.templates') }}">
+                <i class="fa-solid fa-chart-simple"></i> Analytics
+            </a>
+            {% else %}
+            <a class="t12" href="{{ url_for('campaigns.templates') }}">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+            </a>
+            {% endif %}
+            <span class="link-separator"></span>
+            <a class="t12" href="{{ url_for('campaigns.templates') }}">
+                <i class="fa-solid fa-copy"></i> Duplicate
+            </a>
+        </div>
+</div>
+{% endfor %}
+
+{% for page_num in campaigns.iter_pages() %}
+{% if page_num %}
+{% if campaigns.page == page_num %}
+<a class="btn btn-info mb-4" href="{{ url_for('campaigns.campaigns', page=page_num)}}">{{ page_num }}</a>
+{% else %}
+<a class="btn btn-outline-info mb-4" href="{{ url_for('campaigns.campaigns', page=page_num)}}">{{ page_num }}</a>
+{% endif %}
+{% else %}
+...
+{% endif %}
+{% endfor %}
+
+
+{% else %}
+
+<div class="white-container">
+    <p>You don't have any campaigns yet. Create one to see here</p>
+</div>
+{% endif %}
+{% endblock content %}
