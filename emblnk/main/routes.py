@@ -99,7 +99,7 @@ def apply_bulk_actions():
     selected_contact_ids = request.form['selected_contact_ids']
     selected_contacts = selected_contact_ids.split(',')
     if action == '':
-        flash(f'Please, select required fields', 'error')
+        flash('Please, select required fields', 'danger')
         return redirect(url_for('main.contacts'))
     if action == 'move_to_list':
         list_ = request.form['list_name']
